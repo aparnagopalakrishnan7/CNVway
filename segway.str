@@ -1,0 +1,30 @@
+#include "segway_output/traindir/auxiliary/segway.inc"
+
+GRAPHICAL_MODEL model_seg
+
+frame: 0 {
+   variable: seg {
+      type: TYPE_SEG;
+      conditionalparents: nil using DenseCPT("start_seg");
+   }
+
+   variable: tn {
+      type: continuous observed 0:0;
+      conditionalparents: seg(0) using mixture collection("emission") MAPPING_OBS;
+   }
+}
+
+frame: 1 {
+
+   variable: seg {
+      type: TYPE_SEG;
+      conditionalparents: seg(-1) using DenseCPT("transition");
+   }
+
+   variable: tn {
+      type: continuous observed 0:0;
+      conditionalparents: seg(-1) using mixture collection("emission") MAPPING_OBS;
+   }
+}
+
+chunk 1:1
